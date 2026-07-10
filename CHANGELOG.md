@@ -8,7 +8,7 @@
 - Dashboard with stock, returns, and inventory statistics
 - Material Master with barcode/QR label support
 - Supplier Master with active/inactive handling
-- Purchase Order creation and PO print format
+- Purchase Order creation with backend auto PO numbering and PO print format
 - Vendor Invoice / Payment tracking linked with PO
 - Goods Receipt Note against open/partial PO
 - Material Issue with stock validation and generated issue numbers
@@ -39,6 +39,7 @@
 - `2026-07-09-material-movement-traceability.sql`
 - `2026-07-10-audit-log.sql`
 - `2026-07-10-soft-delete-master-data.sql`
+- `2026-07-10-po-number-sequence.sql`
 - `2026-07-10-vendor-invoice-payments.sql`
 
 ### Notes

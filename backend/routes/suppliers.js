@@ -53,6 +53,7 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
 
     const {
         supplier_name,
+        vendor_code,
         contact_person,
         phone,
         email,
@@ -72,6 +73,7 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
             `INSERT INTO suppliers
             (
                 supplier_name,
+                vendor_code,
                 contact_person,
                 phone,
                 email,
@@ -81,10 +83,11 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
                 is_active
             )
             VALUES
-            ($1,$2,$3,$4,$5,$6,$7,$8)
+            ($1,$2,$3,$4,$5,$6,$7,$8,$9)
             RETURNING *`,
             [
                 supplier_name,
+                vendor_code || null,
                 contact_person,
                 phone,
                 email,
@@ -106,6 +109,7 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
             entity_label: supplier.supplier_name,
             details: {
                 supplier_name: supplier.supplier_name,
+                vendor_code: supplier.vendor_code,
                 phone: supplier.phone,
                 email: supplier.email,
                 gst_number: supplier.gst_number
@@ -133,6 +137,7 @@ router.put('/:id', authenticate, authorize('admin', 'manager'), async (req, res)
 
     const {
         supplier_name,
+        vendor_code,
         contact_person,
         phone,
         email,
@@ -147,17 +152,19 @@ router.put('/:id', authenticate, authorize('admin', 'manager'), async (req, res)
         const result = await pool.query(
             `UPDATE suppliers
              SET supplier_name=$1,
-                 contact_person=$2,
-                 phone=$3,
-                 email=$4,
-                 gst_number=$5,
-                 state=$6,
-                 address=$7,
-                 is_active=$8
-             WHERE id=$9
+                 vendor_code=$2,
+                 contact_person=$3,
+                 phone=$4,
+                 email=$5,
+                 gst_number=$6,
+                 state=$7,
+                 address=$8,
+                 is_active=$9
+             WHERE id=$10
              RETURNING *`,
             [
                 supplier_name,
+                vendor_code || null,
                 contact_person,
                 phone,
                 email,
@@ -185,6 +192,7 @@ router.put('/:id', authenticate, authorize('admin', 'manager'), async (req, res)
             entity_label: supplier.supplier_name,
             details: {
                 supplier_name: supplier.supplier_name,
+                vendor_code: supplier.vendor_code,
                 phone: supplier.phone,
                 email: supplier.email,
                 is_active: supplier.is_active

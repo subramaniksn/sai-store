@@ -6,6 +6,40 @@ const logAudit = require("../utils/auditLog");
 
 const router = express.Router();
 
+function formatPoNumber(number) {
+    return `SAI/2627/${String(number).padStart(4, '0')}`;
+}
+
+/* ==========================================================
+   GET NEXT PURCHASE ORDER NUMBER
+========================================================== */
+
+router.get('/next-number', authenticate, authorize('admin', 'manager'), async (req, res) => {
+
+    try {
+
+        const result = await pool.query(`
+            SELECT
+                last_value + CASE WHEN is_called THEN 1 ELSE 0 END AS next_no
+            FROM purchase_order_number_seq
+        `);
+
+        res.json({
+            po_number: formatPoNumber(result.rows[0].next_no)
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            error: 'Unable to generate Purchase Order number.'
+        });
+
+    }
+
+});
+
 /* ==========================================================
    CREATE PURCHASE ORDER
 ========================================================== */
@@ -13,7 +47,6 @@ const router = express.Router();
 router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) => {
 
     const {
-        po_number,
         supplier_id,
         po_date,
         expected_delivery_date,
@@ -29,9 +62,9 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
         items
     } = req.body;
 
-    if (!po_number || !supplier_id || !Array.isArray(items) || items.length === 0) {
+    if (!supplier_id || !Array.isArray(items) || items.length === 0) {
         return res.status(400).json({
-            error: 'PO Number, Supplier and at least one material are required.'
+            error: 'Supplier and at least one material are required.'
         });
     }
 
@@ -40,6 +73,12 @@ router.post('/', authenticate, authorize('admin', 'manager'), async (req, res) =
     try {
 
         await client.query('BEGIN');
+
+        const numberResult = await client.query(`
+            SELECT nextval('purchase_order_number_seq') AS next_no
+        `);
+
+        const po_number = formatPoNumber(numberResult.rows[0].next_no);
 
         const supplierResult = await client.query(
             `

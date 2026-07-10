@@ -1,0 +1,6 @@
+BEGIN;
+
+ALTER TABLE suppliers
+    ADD COLUMN IF NOT EXISTS vendor_code VARCHAR(100);
+
+COMMIT;

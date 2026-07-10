@@ -90,6 +90,7 @@ backend/db/migrations/2026-07-09-issue-grn-integrity.sql
 backend/db/migrations/2026-07-09-material-movement-traceability.sql
 backend/db/migrations/2026-07-10-audit-log.sql
 backend/db/migrations/2026-07-10-soft-delete-master-data.sql
+backend/db/migrations/2026-07-10-po-number-sequence.sql
 backend/db/migrations/2026-07-10-vendor-invoice-payments.sql
 ```
 
@@ -138,6 +139,23 @@ Recommended:
 - Weekly PostgreSQL backup
 - Keep one backup outside the system
 - Test restore occasionally
+
+## Go-Live Reset
+
+Before handing over to the store team, you can clear demo transaction data and reset document number sequences using:
+
+```text
+backend/db/live-reset-before-handover.sql
+```
+
+Review before running. It clears transaction data and resets:
+
+- PO numbers
+- GRN numbers
+- Issue numbers
+- Return numbers
+
+It keeps master data such as users, materials, and suppliers.
 
 ## Git Notes
 

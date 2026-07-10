@@ -1,6 +1,28 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/client";
 
+const emptyForm = {
+    po_number: "",
+    supplier_id: "",
+    po_date: "",
+    expected_delivery_date: "",
+    project_name: "",
+    vendor_code: "",
+    project_code: "",
+    ref_no: "",
+    remarks: "",
+    gst_percent: 18,
+    freight: 0
+};
+
+const emptyItem = {
+    material_id: "",
+    unit: "",
+    ordered_qty: "",
+    unit_price: "",
+    amount: 0
+};
+
 export default function PurchaseOrders() {
 
     const [suppliers, setSuppliers] = useState([]);
@@ -8,34 +30,17 @@ export default function PurchaseOrders() {
     const [purchaseOrders, setPurchaseOrders] = useState([]);
     const [selectedPO, setSelectedPO] = useState(null);
 
-    const [form, setForm] = useState({
-        po_number: "",
-        supplier_id: "",
-        po_date: "",
-        expected_delivery_date: "",
-        project_name: "",
-        vendor_code: "",
-        project_code: "",
-        ref_no: "",
-        remarks: "",
-        gst_percent: 18,
-        freight: 0
-    });
+    const [form, setForm] = useState(emptyForm);
 
     const [items, setItems] = useState([
-        {
-            material_id: "",
-            unit: "",
-            ordered_qty: "",
-            unit_price: "",
-            amount: 0
-        }
+        { ...emptyItem }
     ]);
 
     useEffect(() => {
         loadSuppliers();
         loadMaterials();
         loadPurchaseOrders();
+        loadNextPONumber();
         const id = localStorage.getItem("selectedPO");
 
         if (id) {
@@ -46,6 +51,37 @@ export default function PurchaseOrders() {
 
         }
     }, []);
+
+    const loadNextPONumber = async () => {
+
+        try {
+
+            const res = await api.get("/purchase-orders/next-number");
+
+            setForm(prev => ({
+                ...prev,
+                po_number: res.data.po_number
+            }));
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
+
+    const resetPOForm = async () => {
+
+        setForm(emptyForm);
+
+        setItems([
+            { ...emptyItem }
+        ]);
+
+        await loadNextPONumber();
+
+    };
 
     const loadSuppliers = async () => {
 
@@ -83,13 +119,7 @@ export default function PurchaseOrders() {
 
         setItems([
             ...items,
-            {
-                material_id: "",
-                unit: "",
-                ordered_qty: "",
-                unit_price: "",
-                amount: 0
-            }
+            { ...emptyItem }
         ]);
 
     };
@@ -102,6 +132,28 @@ export default function PurchaseOrders() {
 
         setItems(arr);
 
+    };
+
+    const uniquePOValues = (field) => [
+        ...new Set(
+            purchaseOrders
+                .map(po => po[field])
+                .filter(value => value !== null && value !== undefined && String(value).trim())
+        )
+    ];
+
+    const projectNameOptions = uniquePOValues("project_name");
+    const projectCodeOptions = uniquePOValues("project_code");
+    const refNoOptions = uniquePOValues("ref_no");
+
+    const handleSupplierChange = (supplierId) => {
+        const supplier = suppliers.find(s => Number(s.id) === Number(supplierId));
+
+        setForm({
+            ...form,
+            supplier_id: supplierId,
+            vendor_code: supplier?.vendor_code || ""
+        });
     };
 
     const updateItem = (index, field, value) => {
@@ -177,6 +229,7 @@ export default function PurchaseOrders() {
 
             alert("Purchase Order Created Successfully");
             loadPurchaseOrders();
+            resetPOForm();
 
         }
         catch (err) {
@@ -687,12 +740,8 @@ export default function PurchaseOrders() {
 
                     <input
                         value={form.po_number}
-                        onChange={(e) =>
-                            setForm({
-                                ...form,
-                                po_number: e.target.value
-                            })
-                        }
+                        readOnly
+                        style={styles.input}
                     />
 
                 </div>

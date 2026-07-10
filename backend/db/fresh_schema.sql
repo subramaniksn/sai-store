@@ -27,7 +27,8 @@ CASCADE;
 DROP SEQUENCE IF EXISTS
     material_return_number_seq,
     material_issue_number_seq,
-    grn_number_seq;
+    grn_number_seq,
+    purchase_order_number_seq;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -42,6 +43,7 @@ CREATE TABLE users (
 CREATE TABLE suppliers (
     id SERIAL PRIMARY KEY,
     supplier_name VARCHAR(200) NOT NULL,
+    vendor_code VARCHAR(100),
     contact_person VARCHAR(150),
     phone VARCHAR(50),
     email VARCHAR(150),
@@ -93,6 +95,8 @@ CREATE TABLE purchase_orders (
     grand_total NUMERIC(14,2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE SEQUENCE purchase_order_number_seq;
 
 CREATE TABLE po_items (
     id SERIAL PRIMARY KEY,

@@ -5,6 +5,7 @@ export default function SupplierMaster() {
 
     const emptySupplier = {
         supplier_name: "",
+        vendor_code: "",
         contact_person: "",
         phone: "",
         email: "",
@@ -84,6 +85,8 @@ export default function SupplierMaster() {
 
             supplier_name: supplier.supplier_name || "",
 
+            vendor_code: supplier.vendor_code || "",
+
             contact_person: supplier.contact_person || "",
 
             phone: supplier.phone || "",
@@ -158,6 +161,7 @@ export default function SupplierMaster() {
 
         return (
             s.supplier_name?.toLowerCase().includes(value) ||
+            s.vendor_code?.toLowerCase().includes(value) ||
             s.contact_person?.toLowerCase().includes(value) ||
             s.phone?.toLowerCase().includes(value) ||
             s.email?.toLowerCase().includes(value) ||
@@ -269,6 +273,23 @@ export default function SupplierMaster() {
                                 setForm({
                                     ...form,
                                     gst_number: e.target.value
+                                })
+                            }
+                        />
+
+                    </div>
+
+                    <div>
+
+                        <label>Vendor Code</label>
+
+                        <input
+                            style={styles.input}
+                            value={form.vendor_code}
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    vendor_code: e.target.value
                                 })
                             }
                         />
@@ -393,6 +414,8 @@ export default function SupplierMaster() {
 
                             <th style={styles.th}>Supplier</th>
 
+                            <th style={styles.th}>Vendor Code</th>
+
                             <th style={styles.th}>Contact</th>
 
                             <th style={styles.th}>Phone</th>
@@ -420,7 +443,7 @@ export default function SupplierMaster() {
                             <tr>
 
                                 <td
-                                    colSpan="9"
+                                    colSpan="10"
                                     style={{
                                         textAlign: "center",
                                         padding: 20
@@ -441,6 +464,10 @@ export default function SupplierMaster() {
 
                                 <td style={styles.td}>
                                     <b>{supplier.supplier_name}</b>
+                                </td>
+
+                                <td style={styles.td}>
+                                    {supplier.vendor_code || "-"}
                                 </td>
 
                                 <td style={styles.td}>
