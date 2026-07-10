@@ -91,6 +91,7 @@ backend/db/migrations/2026-07-09-material-movement-traceability.sql
 backend/db/migrations/2026-07-10-audit-log.sql
 backend/db/migrations/2026-07-10-soft-delete-master-data.sql
 backend/db/migrations/2026-07-10-po-number-sequence.sql
+backend/db/migrations/2026-07-10-supplier-vendor-code.sql
 backend/db/migrations/2026-07-10-vendor-invoice-payments.sql
 ```
 

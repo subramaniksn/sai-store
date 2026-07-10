@@ -752,12 +752,7 @@ export default function PurchaseOrders() {
 
                     <select
                         value={form.supplier_id}
-                        onChange={(e) =>
-                            setForm({
-                                ...form,
-                                supplier_id: e.target.value
-                            })
-                        }
+                        onChange={(e) => handleSupplierChange(e.target.value)}
                     >
 
                         <option value="">
@@ -818,6 +813,7 @@ export default function PurchaseOrders() {
                     <label>Project</label>
 
                     <input
+                        list="project-name-options"
                         value={form.project_name}
                         onChange={(e) =>
                             setForm({
@@ -835,13 +831,15 @@ export default function PurchaseOrders() {
 
                     <input
                         value={form.vendor_code}
-                        onChange={(e) =>
-                            setForm({
-                                ...form,
-                                vendor_code: e.target.value
-                            })
-                        }
+                        readOnly
+                        style={styles.input}
                     />
+
+                    <datalist id="project-name-options">
+                        {projectNameOptions.map(value => (
+                            <option key={value} value={value} />
+                        ))}
+                    </datalist>
 
                 </div>
 
@@ -850,6 +848,7 @@ export default function PurchaseOrders() {
                     <label>Project Code</label>
 
                     <input
+                        list="project-code-options"
                         value={form.project_code}
                         onChange={(e) =>
                             setForm({
@@ -859,6 +858,12 @@ export default function PurchaseOrders() {
                         }
                     />
 
+                    <datalist id="project-code-options">
+                        {projectCodeOptions.map(value => (
+                            <option key={value} value={value} />
+                        ))}
+                    </datalist>
+
                 </div>
 
                 <div>
@@ -866,6 +871,7 @@ export default function PurchaseOrders() {
                     <label>Ref. No.</label>
 
                     <input
+                        list="ref-no-options"
                         value={form.ref_no}
                         onChange={(e) =>
                             setForm({
@@ -874,6 +880,12 @@ export default function PurchaseOrders() {
                             })
                         }
                     />
+
+                    <datalist id="ref-no-options">
+                        {refNoOptions.map(value => (
+                            <option key={value} value={value} />
+                        ))}
+                    </datalist>
 
                 </div>
 

@@ -7,8 +7,9 @@
 - Admin, Manager, and Store Incharge role-based access
 - Dashboard with stock, returns, and inventory statistics
 - Material Master with barcode/QR label support
-- Supplier Master with active/inactive handling
+- Supplier Master with vendor code and active/inactive handling
 - Purchase Order creation with backend auto PO numbering and PO print format
+- PO page auto-fills supplier vendor code and suggests previous project/ref values
 - Vendor Invoice / Payment tracking linked with PO
 - Goods Receipt Note against open/partial PO
 - Material Issue with stock validation and generated issue numbers
@@ -40,6 +41,7 @@
 - `2026-07-10-audit-log.sql`
 - `2026-07-10-soft-delete-master-data.sql`
 - `2026-07-10-po-number-sequence.sql`
+- `2026-07-10-supplier-vendor-code.sql`
 - `2026-07-10-vendor-invoice-payments.sql`
 
 ### Notes
